@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="
+    https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js
+    "></script>
+    <script src="
+    https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.js
+    "></script>
+    <link href="
+    https://cdn.jsdelivr.net/npm/semantic-ui@2.5.0/dist/semantic.min.css
+    " rel="stylesheet">
+</head>
+<body>
+    <div class="ui menu">
+        <div class="item">
+            <div class="ui huge header">Fake Review Detector</div>
+        </div>
+    </div>
+    {% block content %}
+    <h1 class="ui huge header container center aligned twelve wide">
+        {{ label }}
+        <p>{{ result }}</p>
+    </h1>
+    {% endblock %}
+    <div class="ui container form center aligned">
+        <div class="ui field container center aligned twelve wide">
+            <form name="reviewform" id="reviewform" action="/submit_form" method="post" onsubmit="e.preventDefault()">
+                {% csrf_token %}
+                <label>
+                    Write Fake Review Here
+                    <textarea minlength="100" maxlength="4096" name="review" id="review"  rows="2">{% block review %}{{ review }}{% endblock %}</textarea>
+                    <div>
+                        <span id="wordcount">0</span>
+                        <span>/4096</span>
+                    </div>
+                </label>
+                <button class="ui button" type="submit">
+                    Submit
+                </button>
+            </form>
+        </div>
+    </div>
+    <script>
+        onkeyup = (event) => {
+            const characterCount = document.getElementById("review").value.length;
+            const wordCount = document.getElementById("wordcount");
+            wordCount.innerText = characterCount
+            Number(wordCount.textContent)
+            if (Number(wordCount.textContent) < 100) {
+                wordCount.style.color = "red"
+            } else {
+                wordCount.style.color = "black"
+            }
+        };
+    </script>
+</body>
+</html>
